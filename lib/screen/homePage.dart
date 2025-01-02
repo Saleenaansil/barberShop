@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_application_3/screen/bookinPage.dart';
+import 'package:flutter_application_3/screen/barberExplore.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -12,14 +12,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-
-  // List of pages corresponding to each tab
-  final List<Widget> _pages = [
-    Center(child: Text('Habits Page')),
-    Center(child: Text('Pomodoro Page')),
-    Center(child: Text('Widgets Page')),
-    Center(child: Text('Settings Page')),
-  ];
 
   final List<Map<String, String>> barbershops = [
     {
@@ -159,12 +151,21 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   // Background image
                   Positioned.fill(
-                    child: Image.asset(
-                      "asset/Home Card.png",
-                      fit: BoxFit.cover,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8), // Top-left corner radius
+                          topRight: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                          bottomRight:
+                              Radius.circular(8) // Top-right corner radius
+                          ),
+                      child: Image.asset(
+                        "asset/Home Card.png",
+                        fit: BoxFit
+                            .cover, // Ensures the image covers the available space
+                      ),
                     ),
                   ),
-
                   Positioned(
                     top: 165.56,
                     left: 17.33,
@@ -235,11 +236,248 @@ class _HomePageState extends State<HomePage> {
 
                     GestureDetector(
                       onTap: () {
-                        print("Container tapped!");
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Bookinpage()));
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 578, // Height of the bottom sheet
+                              width: 375, // Width of the bottom sheet
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft:
+                                      Radius.circular(24), // Top-left radius
+                                  topRight:
+                                      Radius.circular(24), // Top-right radius
+                                ),
+                              ),
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    // First widget inside the container
+                                    Container(
+                                      width: 375,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xffEDEFFB),
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(
+                                              24), // Top-left radius
+                                          topRight: Radius.circular(
+                                              24), // Top-right radius
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 18),
+                                          child: Row(
+                                            children: [
+                                              Image.asset(
+                                                'asset/Featured icon.png', // Replace with your image path
+                                                width: 48,
+                                                height:
+                                                    48, // Height of the image
+                                                fit: BoxFit.cover,
+                                              ),
+                                              const SizedBox(width: 10),
+                                              const Text(
+                                                "Filter",
+                                                style: TextStyle(
+                                                  color: Color(0xff111827),
+                                                  fontSize: 18,
+                                                  fontFamily:
+                                                      'Plus Jakarta Sans',
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              SizedBox(width: 198),
+                                              Image.asset(
+                                                'asset/Close Square.png', // Replace with your image path
+                                                // width: 24,
+                                                // height:
+                                                //     24, // Height of the image
+                                                // fit: BoxFit.cover,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                        height: 20), // Space between widgets
+
+                                    // Second widget inside the container
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 18, right: 18),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: 339,
+                                            color: Colors.white,
+                                            child: const Center(
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "General Category",
+                                                        style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    width: 18,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text("Basic haircut",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xff8683A1),
+                                                          )),
+                                                      SizedBox(width: 12),
+                                                      Text("Coloring",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xff8683A1),
+                                                          )),
+                                                      SizedBox(width: 12),
+                                                      Text("Treatment",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xff8683A1),
+                                                          ))
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: 16,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Text("Massage",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xff8683A1),
+                                                          )),
+                                                      SizedBox(width: 12),
+                                                      Text("Kids haircut",
+                                                          style: TextStyle(
+                                                            color: Color(
+                                                                0xff8683A1),
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        height: 20), // Space between widgets
+
+                                    // Third widget inside the container
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 18, right: 18),
+                                      child: Container(
+                                        height: 80,
+                                        color: Colors.white,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 18),
+                                              child: Container(
+                                                child: const Text(
+                                                  "Rating Barber",
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Container(
+                                              child: Image.asset(
+                                                'asset/Rating.png', // Replace with your image path
+                                                width: 242,
+                                                // Height of the image
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 18,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 18, right: 18),
+                                      child: Container(
+                                        width: 339,
+                                        child: Image.asset(
+                                          'asset/Section Distance.png', // Replace with your image path
+                                          width: 48,
+                                          // Height of the image
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 24),
+                                    Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              left: 18, right: 18),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              // Navigate to the next page
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const Barberexplore(), // Replace with your next page widget
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                                width: 339,
+                                                height: 54,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      const Color(0xff363062),
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                child: const Center(
+                                                  child: Text("Apply",
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xffFFFFFF),
+                                                      )),
+                                                )),
+                                          ),
+                                        )
+                                      ],
+                                    ), // Space between widgets
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
                       },
                       child: Container(
                         height: 44,
@@ -254,7 +492,7 @@ class _HomePageState extends State<HomePage> {
                           size: 24,
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
 
@@ -376,7 +614,7 @@ class _HomePageState extends State<HomePage> {
                       width: 2, // Optional: Adjust border width
                     ),
                   ),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(left: 24),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -393,12 +631,11 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           width: 8,
                         ),
-                        RotatedBox(
-                            quarterTurns: 18,
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.black,
-                            )),
+                        Image.asset(
+                          'asset/Square Arrow Right Up.png', // Replace with your asset path
+                          width: 24, // Set the width of the image
+                          height: 24, // Set the height of the image
+                        ),
                       ],
                     ),
                   ),
@@ -406,27 +643,24 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(
-              width: 24,
+              height: 24,
             ),
-            Column(
-              children: [
-                Container(
-                  width: 339,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    "Most recommended",
-                    style: TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16.0,
-                      color: Color(0xFF111827),
-                    ),
-                  ),
+
+            Container(
+              width: 339,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text(
+                "Most recommended",
+                style: TextStyle(
+                  fontFamily: 'Plus Jakarta Sans',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16.0,
+                  color: Color(0xFF111827),
                 ),
-              ],
+              ),
             ),
             SizedBox(width: 16),
             Container(
@@ -446,7 +680,7 @@ class _HomePageState extends State<HomePage> {
                   ),
 
                   Positioned(
-                    top: 174,
+                    top: 190,
                     left: 210,
                     right: 0,
                     child: Container(
@@ -456,26 +690,26 @@ class _HomePageState extends State<HomePage> {
                         color: const Color(0xff363062),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Padding(
                           padding: EdgeInsets.only(left: 0),
                           child: Row(
                             children: [
                               SizedBox(width: 24, height: 42),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Booking ',
-                                    style: TextStyle(
-                                      fontFamily: 'Plus Jakarta Sans',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 12.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                'Booking ',
+                                style: TextStyle(
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 12.0,
+                                  color: Colors.white,
+                                ),
                               ),
                               SizedBox(width: 8),
+                              Image.asset(
+                                "asset/Calendar Mark.png",
+                                fit: BoxFit.cover,
+                              ),
                             ],
                           ),
                         ),
@@ -548,6 +782,17 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ],
+            ),
+            SizedBox(
+              height: 16,
+            ),
+            Container(
+              width: 340,
+              height: 8,
+              child: Image.asset(
+                "asset/Slider.png",
+                fit: BoxFit.cover,
+              ),
             ),
             Column(
               children: cuttingstyle.map((barbershop) {
@@ -649,12 +894,12 @@ class _HomePageState extends State<HomePage> {
                       width: 2, // Optional: Adjust border width
                     ),
                   ),
-                  child: const Padding(
+                  child: Padding(
                     padding: EdgeInsets.only(left: 24),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           "See All",
                           style: TextStyle(
                             fontFamily: 'Plus Jakarta Sans',
@@ -666,23 +911,19 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(
                           width: 8,
                         ),
-                        RotatedBox(
-                            quarterTurns: 18,
-                            child: Icon(
-                              Icons.arrow_back,
-                              color: Colors.black,
-                            )),
+                        Image.asset(
+                          'asset/Square Arrow Right Up.png', // Replace with your asset path
+                          width: 24, // Set the width of the image
+                          height: 24, // Set the height of the image
+                        ),
                       ],
                     ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(
-              width: 24,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 24),
+            SizedBox(height: 24),
+            Container(
               child: Column(
                 children: [
                   Container(
@@ -701,51 +942,58 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
+                  SizedBox(width: 16),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Container(
+                      width: double.infinity,
+                      height: 225,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Stack(
+                        children: [
+                          // Background image
+                          Positioned.fill(
+                            child: Image.asset(
+                              "asset/Maps.png",
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                          Positioned(
+                            top: 190,
+                            left: 205,
+                            right: 0,
+                            child: Container(
+                              width: 116,
+                              height: 42,
+                              decoration: BoxDecoration(
+                                color: const Color(0xff363062),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  'Find now',
+                                  style: TextStyle(
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 14.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Container(
-              width: double.infinity,
-              height: 225,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Stack(
-                children: [
-                  // Background image
-                  Positioned.fill(
-                    child: Image.asset(
-                      "asset/Maps.png",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-
-                  Positioned(
-                    top: 176,
-                    left: 205,
-                    right: 0,
-                    child: Container(
-                      width: 116,
-                      height: 42,
-                      decoration: BoxDecoration(
-                        color: const Color(0xff363062),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Find now',
-                          style: TextStyle(
-                            fontFamily: 'Plus Jakarta Sans',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 14.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            const SizedBox(
+              height: 24,
             ),
           ]),
         ),
@@ -757,38 +1005,40 @@ class _HomePageState extends State<HomePage> {
             _selectedIndex = index;
           });
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_filled,
-              color: Color(0xff94A3B8),
+              // color: Color(0xff94A3B8),
             ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.timer,
-              color: Color(0xff94A3B8),
+              // color: Color(0xff94A3B8),
             ),
             label: 'Booking',
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.message_outlined,
-              color: Color(0xff94A3B8),
+//color: Color(0xff94A3B8),
             ),
             label: 'chat',
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.calendar_today_rounded,
-              color: Color(0xff94A3B8),
+            icon: Image.asset(
+              'asset/User Rounded.png', // Replace with your asset path
+              width: 24, // Set the width of the image
+              height: 24, // Set the height of the image
             ),
-            label: 'profile',
+            label: 'Profile',
           ),
         ],
-        selectedItemColor: Color.fromARGB(255, 199, 107, 191),
-        unselectedItemColor: Color(0xFF94A3B8),
+        selectedItemColor: Color(0xff363062),
+        unselectedItemColor: Color(0xff94A3B8),
+        type: BottomNavigationBarType.fixed,
       ),
     );
   }
