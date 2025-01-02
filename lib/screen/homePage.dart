@@ -56,6 +56,31 @@ class _HomePageState extends State<HomePage> {
   ];
 
   int selectedIndex = 0;
+  void navigateToBarberExplorer(String service) {
+    List<Map<String, String>> dataToSend;
+
+    // Determine which list of data to send based on the service selected
+    if (service == "All service") {
+      dataToSend = [...barbershops, ...cuttingstyle]; // Combine both lists
+    } else if (service == "Basic haircut") {
+      dataToSend = cuttingstyle; // Send cutting style list
+    } else if (service == "Coloring") {
+      dataToSend = barbershops; // Send barbershops list
+    }
+    else if (service == "Treatment") {
+      dataToSend = barbershops; // Send barbershops list
+    } else {
+      dataToSend = []; // No data
+    }
+
+    // Navigate to BarberExplorer and pass the data
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Barberexplore(data: dataToSend),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -448,7 +473,10 @@ class _HomePageState extends State<HomePage> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                       Barberexplore(), // Replace with your next page widget
+                                                      Barberexplore(data: [
+                                                    ...barbershops,
+                                                    ...cuttingstyle
+                                                  ]), // Replace with your next page widget
                                                 ),
                                               );
                                             },

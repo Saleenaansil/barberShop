@@ -1,16 +1,53 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_application_3/screen/homePage.dart';
 
-class Barberexplore extends StatelessWidget {
-  Barberexplore({super.key});
+class Barberexplore extends StatefulWidget {
+  final List<Map<String, String>> data;
 
+  // Correct constructor in the StatefulWidget class
+  const Barberexplore({super.key, required this.data});
+
+  @override
+  _BarberexploreState createState() => _BarberexploreState();
+}
+
+class _BarberexploreState extends State<Barberexplore> {
   final List<Map<String, String>> barbershops = [
-    {"name": "All service"},
-    {"name": "Basic haircut"},
-    {"name": "Coloring"},
-    {"name": "Treatment"},
+    {"name": "All service", "details": "Full range of barbershop services."},
+    {"name": "Basic haircut", "details": "Standard haircut for all styles."},
+    {"name": "Coloring", "details": "Hair coloring and styling."},
+    {"name": "Treatment", "details": "Hair treatments for healthier hair."},
   ];
+
+  // Track the selected index
+  int selectedIndex = 0;
+
+  // Simulated data to load dynamically
+  List<String> servicesData = [];
+
+  // Fetch data dynamically (simulated here)
+  void loadDataForService(String serviceName) {
+    setState(() {
+      if (widget.data.isEmpty) {
+        servicesData = ["No services available"];
+        return;
+      }
+
+      if (serviceName == "All service") {
+        servicesData = widget.data
+            .map((barbershop) => barbershop['name'] ?? "Unknown")
+            .toList();
+      } else {
+        servicesData = widget.data
+            .where((barbershop) => barbershop['name'] == serviceName)
+            .map(
+                (barbershop) => barbershop['details'] ?? "No details available")
+            .toList();
+      }
+    });
+
+    print("Loaded services for $serviceName: $servicesData");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,40 +55,30 @@ class Barberexplore extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 57, left: 18, right: 18),
+          padding: const EdgeInsets.only(top: 49, left: 18, right: 18),
           child: Column(
             children: [
               // First Container with User Info
-              Container(
-                width: 339,
-                color: Colors.white,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        IconButton(
-                          icon:
-                              const Icon(Icons.arrow_back, color: Colors.black),
-                          onPressed: () {},
-                        ),
-                        const SizedBox(
-                            width: 16), // Add space between icon and text
-                        const Text(
-                          'Explore Barbers', // Your AppBar title
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
+              Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.black),
+                    onPressed: () {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => HomePage()));
+                    },
+                  ),
+                  const SizedBox(width: 16),
+                  const Text(
+                    'Explore Barbers',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-
-              const SizedBox(height: 34),
+              const SizedBox(height: 24),
               Container(
                 width: double.infinity,
                 height: 225,
@@ -108,7 +135,6 @@ class Barberexplore extends StatelessWidget {
                 ),
               ),
 
-              // Container with "Booking Now" button and Background Image
               const SizedBox(height: 24),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -185,81 +211,137 @@ class Barberexplore extends StatelessWidget {
               ),
 
               const SizedBox(height: 40),
-
-              // Search Bar and Nearest Barbershop Section
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Search Bar
-                  Row(
-                    children: [
-                      Expanded(
+              // Horizontal Scrollable Row of Barbershop Names
+              Container(
+                height: 26,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: barbershops.map((barbershop) {
+                      int index = barbershops.indexOf(barbershop);
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedIndex = index; // Update selected index
+                            // Load data dynamically
+                          });
+                        },
                         child: Container(
-                          height: 44,
-                          decoration: BoxDecoration(
-                            color: const Color(0xffEBF0F5),
-                            borderRadius: BorderRadius.circular(8),
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            barbershop['name']!,
+                            style: TextStyle(
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 14.0,
+                              color: selectedIndex == index
+                                  ? Colors.black // Highlight selected item
+                                  : Color(0xff8683A1),
+                            ),
                           ),
-                          child: const Padding(
-                            padding: EdgeInsets.only(left: 18),
-                            child: Row(
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+
+              // Padding for the container above the ListView
+              Container(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: widget.data.length,
+                  itemBuilder: (context, index) {
+                    final barbershop = widget.data[index];
+                    return Container(
+                      margin: const EdgeInsets.only(
+                          bottom: 16), // 16px margin between items
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          // Display Barbershop Image
+                          Image.asset(
+                            barbershop['svg'] ?? '',
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(width: 12),
+                          // Barbershop Details
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(Icons.search,
-                                    color: Color(0xff363062), size: 24),
-                                SizedBox(width: 12),
                                 Text(
-                                  "Search barber’s, haircut service",
-                                  style: TextStyle(
+                                  barbershop['name'] ?? '',
+                                  style: const TextStyle(
                                     fontFamily: 'Plus Jakarta Sans',
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 14.0,
-                                    color: Color(0xFF8683A1),
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 16.0,
+                                    color: Color(0xFF111827),
                                   ),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on,
+                                      color: Color(0xff8683A1),
+                                      size: 19,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      barbershop['location'] ?? '',
+                                      style: const TextStyle(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 12.0,
+                                        color: Color(0xFF8683A1),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.star,
+                                      color: Color(0xff8683A1),
+                                      size: 19,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      barbershop['rating'] ?? '0.0',
+                                      style: const TextStyle(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 14.0,
+                                        color: Color(0xff6B7280),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                      const SizedBox(width: 12),
-                      // Right-side Container
-                      Container(
-                        height: 44,
-                        width: 44,
-                        decoration: BoxDecoration(
-                          color: const Color(0xff363062),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Icon(
-                          Icons.tune, // Example icon
-                          color: Colors.white,
-                          size: 24,
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  // Horizontal Scrollable Row of Barbershop Names
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: barbershops.map((barbershop) {
-                        return Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            barbershop['name']!, // Display Barbershop Name
-                            style: const TextStyle(
-                              fontFamily: 'Plus Jakarta Sans',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14.0,
-                              color: Color(0xff8683A1),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                ),
               ),
             ],
           ),
