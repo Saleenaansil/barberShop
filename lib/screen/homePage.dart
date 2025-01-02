@@ -448,7 +448,7 @@ class _HomePageState extends State<HomePage> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      const Barberexplore(), // Replace with your next page widget
+                                                       Barberexplore(), // Replace with your next page widget
                                                 ),
                                               );
                                             },
