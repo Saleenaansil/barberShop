@@ -4,7 +4,6 @@ import 'package:flutter_application_3/screen/homePage.dart';
 class Barberexplore extends StatefulWidget {
   final List<Map<String, String>> data;
 
-  // Correct constructor in the StatefulWidget class
   const Barberexplore({super.key, required this.data});
 
   @override
@@ -19,13 +18,10 @@ class _BarberexploreState extends State<Barberexplore> {
     {"name": "Treatment", "details": "Hair treatments for healthier hair."},
   ];
 
-  // Track the selected index
   int selectedIndex = 0;
 
-  // Simulated data to load dynamically
   List<String> servicesData = [];
 
-  // Fetch data dynamically (simulated here)
   void loadDataForService(String serviceName) {
     setState(() {
       if (widget.data.isEmpty) {
@@ -58,27 +54,39 @@ class _BarberexploreState extends State<Barberexplore> {
           padding: const EdgeInsets.only(top: 49, left: 18, right: 18),
           child: Column(
             children: [
-              // First Container with User Info
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back, color: Colors.black),
-                    onPressed: () {
-                      Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => HomePage()));
-                    },
-                  ),
-                  const SizedBox(width: 16),
-                  const Text(
-                    'Explore Barbers',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  HomePage()), // Navigate to HomePage
+                        );
+                      },
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.black,
+                        size: 24,
+                      ),
                     ),
-                  ),
-                ],
+                    SizedBox(width: 16), // Reduced width for back button
+                    Text(
+                      "Explore Barbers",
+                      style: TextStyle(
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14.0,
+                        color: Color(0xFF111827),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 16), // Reduced gap
               Container(
                 width: double.infinity,
                 height: 225,
@@ -87,7 +95,6 @@ class _BarberexploreState extends State<Barberexplore> {
                 ),
                 child: Stack(
                   children: [
-                    // Background image
                     Positioned.fill(
                       child: Image.asset(
                         "asset/image2.png",
@@ -134,8 +141,7 @@ class _BarberexploreState extends State<Barberexplore> {
                   ],
                 ),
               ),
-
-              const SizedBox(height: 24),
+              SizedBox(height: 8), // Reduced gap
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -200,7 +206,7 @@ class _BarberexploreState extends State<Barberexplore> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8), // Reduced gap
               Container(
                 width: 340,
                 height: 8,
@@ -209,11 +215,55 @@ class _BarberexploreState extends State<Barberexplore> {
                   fit: BoxFit.cover,
                 ),
               ),
-
-              const SizedBox(height: 40),
+              SizedBox(height: 12), // Reduced gap
+              Row(
+                children: [
+                  Container(
+                    height: 44,
+                    decoration: BoxDecoration(
+                      color: const Color(0xffEBF0F5),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.only(left: 18, right: 18),
+                      child: Row(
+                        children: [
+                          Icon(Icons.search,
+                              color: const Color(0xff363062), size: 24),
+                          SizedBox(width: 12),
+                          Text(
+                            "Search barber’s, haircut service",
+                            style: TextStyle(
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14.0,
+                              color: Color(0xFF8683A1),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                      width: 8), // Space between the search bar and icon
+                  Container(
+                    height: 44,
+                    width: 44,
+                    decoration: BoxDecoration(
+                      color: const Color(0xff363062),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.tune,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12), // Reduced gap
               // Horizontal Scrollable Row of Barbershop Names
               Container(
-                height: 26,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -223,11 +273,29 @@ class _BarberexploreState extends State<Barberexplore> {
                         onTap: () {
                           setState(() {
                             selectedIndex = index; // Update selected index
-                            // Load data dynamically
                           });
                         },
                         child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 6), // Space between items
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 6,
+                              horizontal:
+                                  12), // Add padding inside the container
+                          decoration: BoxDecoration(
+                            color: selectedIndex == index
+                                ? Color(0xffD7D6E0).withOpacity(0.2)
+                                : Colors
+                                    .transparent, // Background color change on selection
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: selectedIndex == index
+                                  ? Colors.black
+                                  : Colors
+                                      .transparent, // Black border on selection, transparent otherwise
+                              width: 1, // Border width
+                            ), // Rounded corners
+                          ),
                           child: Text(
                             barbershop['name']!,
                             style: TextStyle(
@@ -235,8 +303,9 @@ class _BarberexploreState extends State<Barberexplore> {
                               fontWeight: FontWeight.w700,
                               fontSize: 14.0,
                               color: selectedIndex == index
-                                  ? Colors.black // Highlight selected item
-                                  : Color(0xff8683A1),
+                                  ? Colors.black
+                                  : Color(
+                                      0xff8683A1), // Change color when selected
                             ),
                           ),
                         ),
@@ -246,7 +315,6 @@ class _BarberexploreState extends State<Barberexplore> {
                 ),
               ),
 
-              // Padding for the container above the ListView
               Container(
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -256,8 +324,8 @@ class _BarberexploreState extends State<Barberexplore> {
                     final barbershop = widget.data[index];
                     return Container(
                       margin: const EdgeInsets.only(
-                          bottom: 16), // 16px margin between items
-                      padding: const EdgeInsets.all(12),
+                          bottom: 8), // Reduced margin between items
+                      padding: const EdgeInsets.only(left: 12),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(8),
@@ -272,7 +340,6 @@ class _BarberexploreState extends State<Barberexplore> {
                       ),
                       child: Row(
                         children: [
-                          // Display Barbershop Image
                           Image.asset(
                             barbershop['svg'] ?? '',
                             width: 80,
@@ -280,7 +347,6 @@ class _BarberexploreState extends State<Barberexplore> {
                             fit: BoxFit.cover,
                           ),
                           const SizedBox(width: 12),
-                          // Barbershop Details
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -315,24 +381,14 @@ class _BarberexploreState extends State<Barberexplore> {
                                   ],
                                 ),
                                 const SizedBox(height: 8),
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.star,
-                                      color: Color(0xff8683A1),
-                                      size: 19,
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      barbershop['rating'] ?? '0.0',
-                                      style: const TextStyle(
-                                        fontFamily: 'Plus Jakarta Sans',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 14.0,
-                                        color: Color(0xff6B7280),
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  barbershop['details'] ?? '',
+                                  style: const TextStyle(
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.0,
+                                    color: Color(0xFF8683A1),
+                                  ),
                                 ),
                               ],
                             ),

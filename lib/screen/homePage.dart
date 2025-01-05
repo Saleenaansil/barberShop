@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_application_3/controller/getxcontroller.dart';
 import 'package:flutter_application_3/screen/barberExplore.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -13,6 +15,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
+  final List<Map<String, String>> genaralCategory = [
+    {"name": "Basic haircut"},
+    {"name": "Coloring"},
+    {"name": "Treatment"},
+    {"name": "Message"},
+    {"name": "kids haircut"}
+  ];
   final List<Map<String, String>> barbershops = [
     {
       'name': 'Alana Barbershop-Haircut, Massage & Spa',
@@ -33,6 +42,7 @@ class _HomePageState extends State<HomePage> {
       'svg': 'asset/lisistimage1.png',
     },
   ];
+  final FilterController filterController = Get.put(FilterController());
 
   final List<Map<String, String>> cuttingstyle = [
     {
@@ -56,9 +66,13 @@ class _HomePageState extends State<HomePage> {
   ];
 
   int selectedIndex = 0;
+  double bottomSheetHeight = 0;
   void navigateToBarberExplorer(String service) {
     List<Map<String, String>> dataToSend;
+    final screenHeight = MediaQuery.of(context).size.height;
 
+    // Set the bottomSheetHeight value
+    bottomSheetHeight = screenHeight * 0.5;
     // Determine which list of data to send based on the service selected
     if (service == "All service") {
       dataToSend = [...barbershops, ...cuttingstyle]; // Combine both lists
@@ -66,8 +80,7 @@ class _HomePageState extends State<HomePage> {
       dataToSend = cuttingstyle; // Send cutting style list
     } else if (service == "Coloring") {
       dataToSend = barbershops; // Send barbershops list
-    }
-    else if (service == "Treatment") {
+    } else if (service == "Treatment") {
       dataToSend = barbershops; // Send barbershops list
     } else {
       dataToSend = []; // No data
@@ -88,82 +101,74 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 57, left: 12, right: 18),
+          padding: const EdgeInsets.only(top: 45, left: 18, right: 18),
           child: Column(children: [
             // First Container with User Info
-            Container(
-              width: double.infinity,
-              color: Colors.white,
-              padding: const EdgeInsets.only(left: 6),
-              child: Stack(
-                children: [
-                  // User Info on the Left
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 6),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              Icons.location_on, // Map/Location Icon
-                              color: Color(0XFF363062),
-                              size: 24,
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              "Yogyakarta",
-                              style: TextStyle(
-                                fontFamily: 'Plus Jakarta Sans',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14.0,
-                                color: Color(0xFF6B7280),
-                              ),
-                            ),
-                          ],
+            Stack(
+              children: [
+                // User Info on the Left
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.location_on, // Map/Location Icon
+                          color: Color(0XFF363062),
+                          size: 24,
                         ),
-                      ),
-                      SizedBox(height: 5),
-                      Padding(
-                        padding: EdgeInsets.only(left: 22),
-                        child: Text(
-                          "Joe Samanta",
+                        SizedBox(width: 4),
+                        Text(
+                          "Yogyakarta",
                           style: TextStyle(
                             fontFamily: 'Plus Jakarta Sans',
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w400,
                             fontSize: 14.0,
-                            color: Color(0xFF111827),
+                            color: Color(0xFF6B7280),
                           ),
                         ),
+                      ],
+                    ),
+                    SizedBox(height: 2),
+                    Padding(
+                      padding: EdgeInsets.only(),
+                      child: Text(
+                        "Joe Samanta",
+                        style: TextStyle(
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14.0,
+                          color: Color(0xFF111827),
+                        ),
                       ),
-                    ],
-                  ),
-                  // Profile Picture on the Right (Positioned inside Stack)
-                  Positioned(
-                    right: 18,
-                    child: Container(
-                      width: 42,
-                      height: 49,
-                      child: CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Colors.white,
-                        child: ClipOval(
-                          child: Image.network(
-                            'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg', // Replace with your image URL or asset
-                            fit: BoxFit.cover,
-                            width: 42,
-                            height: 42,
-                          ),
+                    ),
+                  ],
+                ),
+                // Profile Picture on the Right (Positioned inside Stack)
+                Positioned(
+                  right: 18,
+                  child: Container(
+                    width: 42,
+                    height: 49,
+                    child: CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Colors.white,
+                      child: ClipOval(
+                        child: Image.network(
+                          'https://images.ctfassets.net/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=1200&h=992&fl=progressive&q=70&fm=jpg', // Replace with your image URL or asset
+                          fit: BoxFit.cover,
+                          width: 42,
+                          height: 42,
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
 
-            const SizedBox(height: 18),
+            const SizedBox(height: 10),
 
             // Container with "Booking Now" button and Background Image
             Container(
@@ -265,137 +270,216 @@ class _HomePageState extends State<HomePage> {
                           context: context,
                           builder: (BuildContext context) {
                             return Container(
-                              height: 578, // Height of the bottom sheet
-                              width: 375, // Width of the bottom sheet
+                              height: 700,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.only(
-                                  topLeft:
-                                      Radius.circular(24), // Top-left radius
-                                  topRight:
-                                      Radius.circular(24), // Top-right radius
+                                  topLeft: Radius.circular(24),
+                                  topRight: Radius.circular(24),
                                 ),
                               ),
                               child: SingleChildScrollView(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    // First widget inside the container
+                                    // Filter Header
                                     Container(
-                                      width: 375,
+                                      height: 70,
                                       decoration: const BoxDecoration(
                                         color: Color(0xffEDEFFB),
                                         borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(
-                                              24), // Top-left radius
-                                          topRight: Radius.circular(
-                                              24), // Top-right radius
+                                          topLeft: Radius.circular(24),
+                                          topRight: Radius.circular(24),
                                         ),
                                       ),
-                                      child: Center(
-                                        child: Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 18),
-                                          child: Row(
-                                            children: [
-                                              Image.asset(
-                                                'asset/Featured icon.png', // Replace with your image path
-                                                width: 48,
-                                                height:
-                                                    48, // Height of the image
-                                                fit: BoxFit.cover,
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 18),
+                                        child: Row(
+                                          children: [
+                                            Image.asset(
+                                              'asset/Featured icon.png',
+                                              width: 48,
+                                              height: 48,
+                                              fit: BoxFit.cover,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            const Text(
+                                              "Filter",
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.w400,
                                               ),
-                                              const SizedBox(width: 10),
-                                              const Text(
-                                                "Filter",
-                                                style: TextStyle(
-                                                  color: Color(0xff111827),
-                                                  fontSize: 18,
-                                                  fontFamily:
-                                                      'Plus Jakarta Sans',
-                                                  fontWeight: FontWeight.w400,
-                                                ),
+                                            ),
+                                            const Spacer(),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Image.asset(
+                                                'asset/Close Square.png',
                                               ),
-                                              SizedBox(width: 198),
-                                              Image.asset(
-                                                'asset/Close Square.png', // Replace with your image path
-                                                // width: 24,
-                                                // height:
-                                                //     24, // Height of the image
-                                                // fit: BoxFit.cover,
-                                              ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                        height: 20), // Space between widgets
-
-                                    // Second widget inside the container
+                                    const SizedBox(height: 10),
+                                    // General Category
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 18, right: 18),
-                                      child: Row(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 18),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            width: 339,
-                                            color: Colors.white,
-                                            child: const Center(
-                                              child: Column(
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      Text(
-                                                        "General Category",
-                                                        style: TextStyle(
-                                                          color: Colors.black,
-                                                          fontSize: 18,
-                                                        ),
+                                          const Text(
+                                            "General Category",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 20),
+                                          Wrap(
+                                            spacing: 12,
+                                            runSpacing: 8,
+                                            children: genaralCategory
+                                                .asMap()
+                                                .entries
+                                                .map((entry) {
+                                              int index = entry.key;
+                                              String name =
+                                                  entry.value['name']!;
+                                              return GestureDetector(
+                                                onTap: () {
+                                                  filterController
+                                                      .updateSelectedIndex(
+                                                          index);
+                                                },
+                                                child: Obx(
+                                                  () => Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      vertical: 6,
+                                                      horizontal: 12,
+                                                    ),
+                                                    decoration: BoxDecoration(
+                                                      color: filterController
+                                                                  .selectedIndex
+                                                                  .value ==
+                                                              index
+                                                          ? const Color(
+                                                                  0xff8683A1)
+                                                              .withOpacity(0.2)
+                                                          : Colors.white,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8),
+                                                      border: Border.all(
+                                                        color: filterController
+                                                                    .selectedIndex
+                                                                    .value ==
+                                                                index
+                                                            ? Colors.black
+                                                            : Colors
+                                                                .transparent,
+                                                        width: 1,
                                                       ),
-                                                    ],
+                                                    ),
+                                                    child: Text(
+                                                      name,
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontSize: 14.0,
+                                                        color: filterController
+                                                                    .selectedIndex
+                                                                    .value ==
+                                                                index
+                                                            ? Colors.black
+                                                            : const Color(
+                                                                0xff8683A1),
+                                                      ),
+                                                    ),
                                                   ),
-                                                  SizedBox(
-                                                    width: 18,
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 18,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 18),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Rating Barber",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 18),
+                                          Obx(
+                                            () => Container(
+                                              child: Row(
+                                                children: [
+                                                  Container(
+                                                    width: 242,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        // Generate the rating stars
+                                                        ...List.generate(5,
+                                                            (index) {
+                                                          return GestureDetector(
+                                                            onTap: () {
+                                                              filterController
+                                                                  .updateRating(
+                                                                      index +
+                                                                          1.0); // Update rating
+                                                            },
+                                                            child: Icon(
+                                                              index <
+                                                                      filterController
+                                                                          .rating
+                                                                          .value
+                                                                  ? Icons.star
+                                                                  : Icons
+                                                                      .star_border,
+                                                              color: index <
+                                                                      filterController
+                                                                          .rating
+                                                                          .value
+                                                                  ? Colors.amber
+                                                                  : Colors.grey,
+                                                              size: 40,
+                                                            ),
+                                                          );
+                                                        }),
+
+                                                        // Display the rating value on the right side of the stars
+                                                      ],
+                                                    ),
                                                   ),
-                                                  Row(
-                                                    children: [
-                                                      Text("Basic haircut",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xff8683A1),
-                                                          )),
-                                                      SizedBox(width: 12),
-                                                      Text("Coloring",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xff8683A1),
-                                                          )),
-                                                      SizedBox(width: 12),
-                                                      Text("Treatment",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xff8683A1),
-                                                          ))
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 16,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Text("Massage",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xff8683A1),
-                                                          )),
-                                                      SizedBox(width: 12),
-                                                      Text("Kids haircut",
-                                                          style: TextStyle(
-                                                            color: Color(
-                                                                0xff8683A1),
-                                                          )),
-                                                    ],
+                                                  Text(
+                                                    "( ${filterController.rating.value.toStringAsFixed(1)})",
+                                                    style: const TextStyle(
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: Color(0xff363062),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -404,102 +488,186 @@ class _HomePageState extends State<HomePage> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                        height: 20), // Space between widgets
 
-                                    // Third widget inside the container
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 18, right: 18),
-                                      child: Container(
-                                        height: 80,
-                                        color: Colors.white,
-                                        child: Column(
+                                    Obx(() => Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 18),
-                                              child: Container(
-                                                child: const Text(
-                                                  "Rating Barber",
-                                                  style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 18,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
                                             Container(
-                                              child: Image.asset(
-                                                'asset/Rating.png', // Replace with your image path
-                                                width: 242,
-                                                // Height of the image
-                                                fit: BoxFit.cover,
+                                              width: 208,
+                                              child: Slider(
+                                                value: filterController
+                                                    .rating.value,
+                                                min: 1.0,
+                                                max: 5.0,
+                                                divisions: 4,
+                                                label: filterController
+                                                    .rating.value
+                                                    .toStringAsFixed(1),
+                                                onChanged: (double newRating) {
+                                                  filterController
+                                                      .updateRating(newRating);
+                                                },
                                               ),
-                                            ),
-                                            const SizedBox(
-                                              height: 18,
                                             ),
                                           ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
+                                        )),
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 18, right: 18),
-                                      child: Container(
-                                        width: 339,
-                                        child: Image.asset(
-                                          'asset/Section Distance.png', // Replace with your image path
-                                          width: 48,
-                                          // Height of the image
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 24),
-                                    Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 18, right: 18),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              // Navigate to the next page
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Barberexplore(data: [
-                                                    ...barbershops,
-                                                    ...cuttingstyle
-                                                  ]), // Replace with your next page widget
-                                                ),
-                                              );
-                                            },
-                                            child: Container(
-                                                width: 339,
-                                                height: 54,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xff363062),
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                child: const Center(
-                                                  child: Text("Apply",
-                                                      style: TextStyle(
-                                                        color:
-                                                            Color(0xffFFFFFF),
-                                                      )),
-                                                )),
+                                      padding: const EdgeInsets.only(left: 18),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            "Distance",
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700,
+                                            ),
                                           ),
-                                        )
-                                      ],
-                                    ), // Space between widgets
+                                          const SizedBox(height: 18),
+
+                                          // Container for nearest distance
+                                          Row(
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  const Text(
+                                                    "Nearest",
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color:
+                                                            Color(0xff8683A1)),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 8,
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Container(
+                                                        width:
+                                                            48, // Set the width to 39
+                                                        height:
+                                                            48, // Set the height to 48
+                                                        child: TextField(
+                                                          onChanged: (value) {
+                                                            // Handle change for nearest distance here
+                                                          },
+                                                          decoration:
+                                                              InputDecoration(
+                                                            border:
+                                                                OutlineInputBorder(),
+
+                                                            contentPadding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    vertical:
+                                                                        12,
+                                                                    horizontal:
+                                                                        8), // Adjust padding for better alignment
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(width: 6),
+                                                      Text(
+                                                        "km",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: Color(
+                                                                0xff363062)),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                width: 34,
+                                              ),
+                                              Text(
+                                                "-",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Color(0xff363062)),
+                                              ),
+                                              SizedBox(
+                                                width: 34,
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const Text(
+                                                        "Farthest",
+                                                        style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: Color(
+                                                                0xff8683A1)),
+                                                      ),
+                                                      const SizedBox(height: 8),
+                                                      Row(
+                                                        children: [
+                                                          Container(
+                                                            width:
+                                                                48, // Set the width to 39
+                                                            height:
+                                                                48, // Set the height to 48
+                                                            child: TextField(
+                                                              onChanged:
+                                                                  (value) {
+                                                                // Handle change for nearest distance here
+                                                              },
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                border:
+                                                                    OutlineInputBorder(),
+
+                                                                contentPadding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                        vertical:
+                                                                            12,
+                                                                        horizontal:
+                                                                            8), // Adjust padding for better alignment
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 6),
+                                                          Text(
+                                                            "km",
+                                                            style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400,
+                                                                color: Color(
+                                                                    0xff363062)),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 18),
+
+                                          // Container for farthest distance
+                                        ],
+                                      ),
+                                    )
                                   ],
                                 ),
                               ),
@@ -515,12 +683,12 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
-                          Icons.tune, // Example icon
+                          Icons.tune,
                           color: Colors.white,
                           size: 24,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
 
@@ -674,21 +842,19 @@ class _HomePageState extends State<HomePage> {
               height: 24,
             ),
 
-            Container(
-              width: 339,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                "Most recommended",
-                style: TextStyle(
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16.0,
-                  color: Color(0xFF111827),
+            const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Most recommended",
+                  style: TextStyle(
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16.0,
+                    color: Color(0xFF111827),
+                  ),
                 ),
-              ),
+              ],
             ),
             SizedBox(width: 16),
             Container(
@@ -747,6 +913,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            SizedBox(height: 18),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -988,11 +1155,22 @@ class _HomePageState extends State<HomePage> {
                               fit: BoxFit.cover,
                             ),
                           ),
-
                           Positioned(
-                            top: 190,
-                            left: 205,
+                            top: 60,
+                            left: 10,
                             right: 0,
+                            child: Container(
+                              child: Center(
+                                child: Image.asset(
+                                  "asset/Poin.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            top: 185,
+                            left: 240,
                             child: Container(
                               width: 116,
                               height: 42,
@@ -1000,15 +1178,57 @@ class _HomePageState extends State<HomePage> {
                                 color: const Color(0xff363062),
                                 borderRadius: BorderRadius.circular(8),
                               ),
-                              child: const Center(
-                                child: Text(
-                                  'Find now',
-                                  style: TextStyle(
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 14.0,
-                                    color: Colors.white,
-                                  ),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .center, // Center-align text and icon
+                                  children: [
+                                    Text(
+                                      'Find now',
+                                      style: TextStyle(
+                                        fontFamily: 'Plus Jakarta Sans',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 14.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width:
+                                            8), // Space between text and icon
+                                    Icon(
+                                      Icons.search, // Search icon
+                                      color: Colors.white,
+                                      size: 16, // Adjust the size if needed
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          Positioned(
+                            top: 24,
+                            left: 9,
+                            right: 0,
+                            child: Container(
+                              child: Center(
+                                child: Image.asset(
+                                  "asset/Poin.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+
+                          Positioned(
+                            top: 36,
+                            left: 191,
+                            right: 0,
+                            child: Container(
+                              child: Center(
+                                child: Image.asset(
+                                  "asset/Poin.png",
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
